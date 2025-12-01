@@ -23,6 +23,10 @@ class WindowManager implements AppModule {
 
   async createWindow(): Promise<BrowserWindow> {
     const browserWindow = new BrowserWindow({
+      width: 1280,
+      height: 720,
+      minWidth: 640,
+      minHeight: 360,
       show: false, // Use the 'ready-to-show' event to show the instantiated BrowserWindow.
       webPreferences: {
         nodeIntegration: false,

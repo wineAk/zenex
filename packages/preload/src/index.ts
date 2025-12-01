@@ -6,4 +6,14 @@ function send(channel: string, message: string) {
   return ipcRenderer.invoke(channel, message);
 }
 
-export {sha256sum, versions, send};
+// Zendesk API用の関数を追加
+function fetchZendesk(query: any, header: any) {
+  return ipcRenderer.invoke('zendesk:fetch', query, header);
+}
+
+// Zendesk CSV用の関数を追加
+function csvZendesk(csvArray: string[][]) {
+  return ipcRenderer.invoke('zendesk:csv', csvArray);
+}
+
+export {sha256sum, versions, send, fetchZendesk, csvZendesk};

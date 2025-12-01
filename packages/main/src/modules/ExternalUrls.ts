@@ -5,9 +5,9 @@ import {URL} from 'node:url';
 
 export class ExternalUrls implements AppModule {
 
-  readonly #externalUrls: Set<string>;
+  readonly #externalUrls: Set<string | RegExp>;
 
-  constructor(externalUrls: Set<string>) {
+  constructor(externalUrls: Set<string | RegExp>) {
     this.#externalUrls = externalUrls;
   }
 
@@ -16,7 +16,11 @@ export class ExternalUrls implements AppModule {
       contents.setWindowOpenHandler(({url}) => {
         const {origin} = new URL(url);
 
-        if (this.#externalUrls.has(origin)) {
+        if (Array.from(this.#externalUrls).some(pattern => 
+          pattern instanceof RegExp 
+            ? pattern.test(origin)
+            : pattern === origin
+        )) {
           shell.openExternal(url).catch(console.error);
         } else if (import.meta.env.DEV) {
           console.warn(`Blocked the opening of a disallowed external origin: ${origin}`);
